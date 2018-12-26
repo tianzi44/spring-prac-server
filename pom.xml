@@ -23,7 +23,7 @@
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
-      <version>4.11</version>
+      <version>4.12</version>
       <scope>test</scope>
     </dependency>
       <dependency>
@@ -47,70 +47,190 @@
           <version>4.3.15.RELEASE</version>
       </dependency>
       <dependency>
+          <groupId>org.springframework</groupId>
+          <artifactId>spring-aop</artifactId>
+          <version>4.3.15.RELEASE</version>
+      </dependency>
+      <dependency>
+          <groupId>org.springframework</groupId>
+          <artifactId>spring-test</artifactId>
+          <version>4.3.15.RELEASE</version>
+      </dependency>
+      <dependency>
           <groupId>org.apache.commons</groupId>
           <artifactId>com.springsource.org.apache.commons.logging</artifactId>
           <version>1.1.1</version>
           <type>pom</type>
       </dependency>
-
-
   </dependencies>
 
   <build>
-    <pluginManagement><!-- lock down plugins versions to avoid using Maven defaults (may be moved to parent pom) -->
-      <plugins>
-        <!-- clean lifecycle, see https://maven.apache.org/ref/current/maven-core/lifecycles.html#clean_Lifecycle -->
-        <plugin>
-          <artifactId>maven-clean-plugin</artifactId>
-          <version>3.1.0</version>
-        </plugin>
-        <!-- default lifecycle, jar packaging: see https://maven.apache.org/ref/current/maven-core/default-bindings.html#Plugin_bindings_for_jar_packaging -->
-        <plugin>
-          <artifactId>maven-resources-plugin</artifactId>
-          <version>3.0.2</version>
-        </plugin>
-        <plugin>
-          <artifactId>maven-compiler-plugin</artifactId>
-          <version>3.8.0</version>
-        </plugin>
-        <plugin>
-          <artifactId>maven-surefire-plugin</artifactId>
-          <version>2.22.1</version>
-        </plugin>
+    <!--这样也可以把所有的xml文件，打包到相应位置。-->
+    <resources>
+      <resource>
+        <directory>src/main/resources</directory>
+        <includes>
+          <include>**/*.properties</include>
+          <include>**/*.xml</include>
+          <include>**/*.tld</include>
+        </includes>
+        <filtering>false</filtering>
+      </resource>
+    </resources>
 
+      <!--这个配置需要移除，不然idea的右边栏 没有下边的插件使用-->
+      <!--<pluginManagement>-->
+      <!-- lock down plugins versions to avoid using Maven defaults (may be moved to parent pom) -->
+      <plugins>
+
+          <plugin>
+              <groupId>org.apache.maven.plugins</groupId>
+              <artifactId>maven-archetype-plugin</artifactId>
+              <version>3.0.1</version>
+          </plugin>
+
+        <!--使用shade插件进行打包-->
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-jar-plugin</artifactId>
+          <artifactId>maven-shade-plugin</artifactId>
+          <version>1.4</version>
+          <executions>
+            <execution>
+              <phase>package</phase>
+              <goals>
+                <goal>shade</goal>
+              </goals>
+              <configuration>
+                <transformers>
+                  <transformer
+                          implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
+                    <resource>META-INF/spring.handlers</resource>
+                  </transformer>
+                  <transformer
+                          implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+                    <mainClass>com.panda521.SpringPracServerApplication</mainClass>
+                  </transformer>
+                  <transformer
+                          implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
+                    <resource>META-INF/spring.schemas</resource>
+                  </transformer>
+                </transformers>
+              </configuration>
+            </execution>
+          </executions>
+        </plugin>
+
+        <!--使用maven-assembly-plugin插件进行打包 ,使用 mvn assembly:assembly 命令进行打包-->
+        <plugin>
+          <artifactId>maven-assembly-plugin</artifactId>
           <configuration>
+            <appendAssemblyId>false</appendAssemblyId>
+            <descriptorRefs>
+              <descriptorRef>jar-with-dependencies</descriptorRef>
+            </descriptorRefs>
             <archive>
               <manifest>
-                  <!--指定manifest文件包含应用加载的主入口方法-->
+                <!-- 此处指定main方法入口的class -->
                 <mainClass>com.panda521.SpringPracServerApplication</mainClass>
-                  <!--todo 未知，需要了解下-->
-                <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
               </manifest>
             </archive>
           </configuration>
+          <executions>
+            <execution>
+              <id>make-assembly</id>
+              <phase>package</phase>
+              <goals>
+                <goal>assembly</goal>
+              </goals>
+            </execution>
+          </executions>
         </plugin>
 
-        <plugin>
-          <artifactId>maven-install-plugin</artifactId>
-          <version>2.5.2</version>
-        </plugin>
-        <plugin>
-          <artifactId>maven-deploy-plugin</artifactId>
-          <version>2.8.2</version>
-        </plugin>
-        <!-- site lifecycle, see https://maven.apache.org/ref/current/maven-core/lifecycles.html#site_Lifecycle -->
-        <plugin>
-          <artifactId>maven-site-plugin</artifactId>
-          <version>3.7.1</version>
-        </plugin>
-        <plugin>
-          <artifactId>maven-project-info-reports-plugin</artifactId>
-          <version>3.0.0</version>
-        </plugin>
+        <!--<plugin>-->
+          <!--<groupId>org.apache.maven.plugins</groupId>-->
+          <!--<artifactId>maven-compiler-plugin</artifactId>-->
+          <!--<configuration>-->
+            <!--<defaultLibBundleDir>lib</defaultLibBundleDir>-->
+            <!--<source>1.6</source>-->
+            <!--<target>1.6</target>-->
+            <!--<encoding>UTF-8</encoding>-->
+          <!--</configuration>-->
+        <!--</plugin>-->
+
+        <!--<plugin>-->
+          <!--<groupId>org.apache.maven.plugins</groupId>-->
+          <!--<artifactId>maven-jar-plugin</artifactId>-->
+          <!--<configuration>-->
+            <!--<archive>-->
+              <!--<manifest>-->
+                <!--<addClasspath>true</addClasspath>-->
+                <!--<classpathPrefix>lib/</classpathPrefix>-->
+                  <!--&lt;!&ndash;指定manifest文件包含应用加载的主入口方法&ndash;&gt;-->
+                <!--<mainClass>com.panda521.SpringPracServerApplication</mainClass>-->
+                  <!--&lt;!&ndash;todo 未知，需要了解下&ndash;&gt;-->
+                <!--<addDefaultImplementationEntries>true</addDefaultImplementationEntries>-->
+              <!--</manifest>-->
+            <!--</archive>-->
+          <!--</configuration>-->
+        <!--</plugin>-->
+
+        <!--依赖拷贝插件-->
+        <!--<plugin>-->
+          <!--<groupId>org.apache.maven.plugins</groupId>-->
+          <!--<artifactId>maven-dependency-plugin</artifactId>-->
+          <!--<executions>-->
+            <!--<execution>-->
+              <!--<id>copy</id>-->
+              <!--<phase>package</phase>-->
+              <!--<goals>-->
+                <!--<goal>copy-dependencies</goal>-->
+              <!--</goals>-->
+              <!--<configuration>-->
+                <!--<outputDirectory>-->
+                  <!--${project.build.directory}/lib-->
+                <!--</outputDirectory>-->
+              <!--</configuration>-->
+            <!--</execution>-->
+          <!--</executions>-->
+        <!--</plugin>-->
+
+        <!-- clean lifecycle, see https://maven.apache.org/ref/current/maven-core/lifecycles.html#clean_Lifecycle -->
+        <!--<plugin>-->
+          <!--<artifactId>maven-clean-plugin</artifactId>-->
+          <!--<version>3.1.0</version>-->
+        <!--</plugin>-->
+        <!--&lt;!&ndash; default lifecycle, jar packaging: see https://maven.apache.org/ref/current/maven-core/default-bindings.html#Plugin_bindings_for_jar_packaging &ndash;&gt;-->
+        <!--<plugin>-->
+          <!--<artifactId>maven-resources-plugin</artifactId>-->
+          <!--<version>3.0.2</version>-->
+        <!--</plugin>-->
+        <!--<plugin>-->
+          <!--<artifactId>maven-compiler-plugin</artifactId>-->
+          <!--<version>3.8.0</version>-->
+        <!--</plugin>-->
+        <!--<plugin>-->
+          <!--<artifactId>maven-surefire-plugin</artifactId>-->
+          <!--<version>2.22.1</version>-->
+        <!--</plugin>-->
+
+        <!--<plugin>-->
+          <!--<artifactId>maven-install-plugin</artifactId>-->
+          <!--<version>2.5.2</version>-->
+        <!--</plugin>-->
+        <!--<plugin>-->
+          <!--<artifactId>maven-deploy-plugin</artifactId>-->
+          <!--<version>2.8.2</version>-->
+        <!--</plugin>-->
+        <!--&lt;!&ndash; site lifecycle, see https://maven.apache.org/ref/current/maven-core/lifecycles.html#site_Lifecycle &ndash;&gt;-->
+        <!--<plugin>-->
+          <!--<artifactId>maven-site-plugin</artifactId>-->
+          <!--<version>3.7.1</version>-->
+        <!--</plugin>-->
+        <!--<plugin>-->
+          <!--<artifactId>maven-project-info-reports-plugin</artifactId>-->
+          <!--<version>3.0.0</version>-->
+        <!--</plugin>-->
       </plugins>
-    </pluginManagement>
+    <!--</pluginManagement>-->
   </build>
 </project>
