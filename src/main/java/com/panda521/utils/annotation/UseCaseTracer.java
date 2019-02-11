@@ -1,6 +1,6 @@
 package com.panda521.utils.annotation;
 
-import com.panda521.service.annotationPrac.AnnotationPrac1;
+import com.panda521.service.annotationPrac.UserCaseAnnoPrac;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
@@ -35,6 +35,6 @@ public class UseCaseTracer {
 
     public static void main(String[] args){
         UseCaseTracer useCaseTracer = new UseCaseTracer();
-        useCaseTracer.handle(AnnotationPrac1.class);
+        useCaseTracer.handle(UserCaseAnnoPrac.class);
     }
 }
