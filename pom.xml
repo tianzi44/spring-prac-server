@@ -183,40 +183,39 @@
             <!--</plugin>-->
 
             <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-jar-plugin</artifactId>
-            <configuration>
-            <archive>
-            <manifest>
-            <addClasspath>true</addClasspath>
-            <classpathPrefix>lib/</classpathPrefix>
-            <!--指定manifest文件包含应用加载的主入口方法-->
-            <mainClass>com.panda521.SpringPracServerApplication</mainClass>
-            <!--todo 未知，需要了解下-->
-            <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
-            </manifest>
-            </archive>
-            </configuration>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <configuration>
+                    <archive>
+                        <manifest>
+                            <addClasspath>true</addClasspath>
+                            <classpathPrefix>lib/</classpathPrefix>
+                            <!--指定manifest文件包含应用加载的主入口方法-->
+                            <mainClass>com.panda521.SpringPracServerApplication</mainClass>
+                            <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+                        </manifest>
+                    </archive>
+                </configuration>
             </plugin>
 
             <!--依赖拷贝插件-->
             <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-dependency-plugin</artifactId>
-            <executions>
-            <execution>
-            <id>copy</id>
-            <phase>package</phase>
-            <goals>
-            <goal>copy-dependencies</goal>
-            </goals>
-            <configuration>
-            <outputDirectory>
-            ${project.build.directory}/lib
-            </outputDirectory>
-            </configuration>
-            </execution>
-            </executions>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>copy</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>copy-dependencies</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>
+                                ${project.build.directory}/lib
+                            </outputDirectory>
+                        </configuration>
+                    </execution>
+                </executions>
             </plugin>
 
             <!-- clean lifecycle, see https://maven.apache.org/ref/current/maven-core/lifecycles.html#clean_Lifecycle -->
