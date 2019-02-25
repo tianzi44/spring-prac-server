@@ -21,14 +21,14 @@ public class AopTest {
     private AllySkill slimeWithAllyDragon;
 
     @Test
-    public void powerfulSlime(){
+    public void bePowerfulSlime(){
         slimeWithAllyDragon.fire();
         Slime slime = (Slime)slimeWithAllyDragon;
         slime.dance();
     }
 
     @Test
-    public void performTest(){
+    public void predationTest(){
         slime.predation();
     }
 
@@ -38,12 +38,12 @@ public class AopTest {
     }
 
     @Test
-    public void jumpTest(){
+    public void getHeatTest(){
         slime.getHeat(1);
     }
 
     @Test
-    public void jumpTest2(){
+    public void getHeatTest2(){
         slime.getHeat(10);
     }
 

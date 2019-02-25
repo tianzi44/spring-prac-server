@@ -28,7 +28,7 @@ public class TranSlime implements Slime {
     }
 
     public void predation() {
-        System.out.println(name + "表演" + show);
+        System.out.println(name + show);
     }
 
     private String name;

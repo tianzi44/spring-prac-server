@@ -16,7 +16,10 @@ import org.springframework.stereotype.Component;
 @Component
 @Aspect
 public class SlimeAop {
-    @Before("execution(* com.panda521.aop.TranSlime.predation(..))")
+    @Pointcut("execution(* com.panda521.aop.TranSlime.predation(..))")
+    public void p1(){};
+
+    @Before("p1()")
     public void hungry(){
         System.out.println("肚子饿了");
     }
