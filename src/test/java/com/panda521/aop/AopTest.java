@@ -15,11 +15,36 @@ import org.springframework.test.context.junit4.SpringRunner;
 @ContextConfiguration(classes = SpringAopConfig.class)
 public class AopTest {
     @Autowired
-    private Performer performer;
+    private Slime slime;
+
+    @Autowired
+    private AllySkill slimeWithAllyDragon;
+
+    @Test
+    public void powerfulSlime(){
+        slimeWithAllyDragon.fire();
+        Slime slime = (Slime)slimeWithAllyDragon;
+        slime.dance();
+    }
 
     @Test
     public void performTest(){
-        performer.perform();
+        slime.predation();
+    }
+
+    @Test
+    public void danceTest(){
+        slime.dance();
+    }
+
+    @Test
+    public void jumpTest(){
+        slime.getHeat(1);
+    }
+
+    @Test
+    public void jumpTest2(){
+        slime.getHeat(10);
     }
 
 }
