@@ -40,5 +40,6 @@
 
     </aop:config>
 
+    <bean class="com.panda521.aspect.DevilAspect" factory-method="aspectOf"></bean>
 
 </beans>

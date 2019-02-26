@@ -52,4 +52,8 @@ public class TranSlime implements Slime {
         this.show = show;
     }
 
+    public static void main(String[] args) {
+        new TranSlime().predation();
+    }
+
 }
