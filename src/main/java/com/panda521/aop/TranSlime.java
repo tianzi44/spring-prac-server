@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
  * @date 2019-02-25
  * 转生的史莱姆
  */
+@Component
 public class TranSlime implements Slime {
     public TranSlime() {
     }
@@ -24,7 +25,7 @@ public class TranSlime implements Slime {
     }
 
     public void getHeat(int temperature) {
-        System.out.println("现在温度：" + temperature + " 太冷了，需要吸收热量");
+        System.out.println("太冷了，需要吸收热量");
     }
 
     public void predation() {

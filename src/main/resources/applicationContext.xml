@@ -3,17 +3,42 @@
         xmlns="http://www.springframework.org/schema/beans"
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xmlns:context="http://www.springframework.org/schema/context"
+        xmlns:aop="http://www.springframework.org/schema/aop"
         xsi:schemaLocation="
         http://www.springframework.org/schema/beans
         http://www.springframework.org/schema/beans/spring-beans-4.2.xsd
         http://www.springframework.org/schema/context
-        http://www.springframework.org/schema/context/spring-context.xsd">
+        http://www.springframework.org/schema/context/spring-context.xsd
+        http://www.springframework.org/schema/aop
+        http://www.springframework.org/schema/aop/spring-aop.xsd">
 
     <!--spring开启包扫描-->
-    <context:component-scan base-package="com.panda521" />
+    <!--<context:component-scan base-package="com.panda521.aop" />-->
 
-    <bean name="jack" class="com.panda521.vo.SuperManVO">
-        <property name="name" value="杰克—库尔德"></property>
-        <property name="age" value="30"></property>
+    <!--开启可以读取有@Aspect的组件，对内部的做了切面处理的bean，进行代理操作-->
+    <!--<aop:aspectj-autoproxy />-->
+
+    <bean id="slimeAopPOJO" class="com.panda521.aop.SlimeAopPOJO" />
+
+    <bean id="slime" class="com.panda521.aop.TranSlime" >
+        <property name="name" value="复活的史莱姆"/>
+        <property name="show" value="使用捕食技能"/>
     </bean>
+
+    <aop:config>
+        <aop:pointcut id="predation" expression="execution(* com.panda521.aop.TranSlime.predation(..))"/>
+        <aop:pointcut id="getHeat" expression="execution(* com.panda521.aop.TranSlime.getHeat(int)) and args(temperature)"></aop:pointcut>
+        <aop:aspect ref="slimeAopPOJO">
+            <aop:before pointcut-ref="predation" method="hungry" />
+            <aop:around pointcut-ref="getHeat" method="around" />
+        </aop:aspect>
+
+        <!--给现有的类增加新的功能-->
+        <aop:aspect>
+            <aop:declare-parents types-matching="com.panda521.aop.TranSlime" implement-interface="com.panda521.aop.AllySkill" default-impl="com.panda521.aop.AllyDragon" />
+        </aop:aspect>
+
+    </aop:config>
+
+
 </beans>
